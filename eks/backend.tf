@@ -6,15 +6,14 @@ terraform {
       version = "~> 5.49.0"
     }
   }
+ terraform {
   backend "s3" {
     bucket         = "mybucket2108k"
-    region         = "us-east-1"
     key            = "eks/terraform.tfstate"
+    region         = "us-east-1"
     dynamodb_table = "Lock-Files"
-    encrypt        = true
   }
 }
-
 provider "aws" {
   region  = var.aws-region
 }
