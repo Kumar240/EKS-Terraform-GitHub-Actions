@@ -1,16 +1,17 @@
-properties([
-    parameters([
-        string(
-            defaultValue: 'dev',
-            name: 'Environment'
-        ),
-        choice(
-            choices: ['plan', 'apply', 'destroy'], 
-            name: 'Terraform_Action'
-        )])
-])
 pipeline {
     agent any
+    parameters {
+        string(
+            defaultValue: 'dev',
+            description: 'The environment to deploy to',
+            name: 'Environment'
+        )
+        choice(
+            choices: ['plan', 'apply', 'destroy'],
+            description: 'The Terraform action to perform',
+            name: 'Terraform_Action'
+        )
+    }
     stages {
         stage('Preparing') {
             steps {
@@ -19,13 +20,13 @@ pipeline {
         }
         stage('Git Pulling') {
             steps {
-                git branch: 'master', url: 'https://github.com/Kumar240/EKS-Terraform-GitHub-Actions.git'
+                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/EKS-Terraform-GitHub-Actions.git'
             }
         }
-        stage('Init') {
+        stage ('Init') {
             steps {
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
-                    sh 'terraform -chdir=eks/ init -reconfigure'
+                    sh 'terraform -chdir=eks/ init'
                 }
             }
         }
@@ -39,7 +40,7 @@ pipeline {
         stage('Action') {
             steps {
                 withAWS(credentials: 'aws-creds', region: 'us-east-1') {
-                    script {    
+                    script {
                         if (params.Terraform_Action == 'plan') {
                             sh "terraform -chdir=eks/ plan -var-file=${params.Environment}.tfvars"
                         } else if (params.Terraform_Action == 'apply') {
