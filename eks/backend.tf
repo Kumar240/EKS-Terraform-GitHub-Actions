@@ -8,12 +8,11 @@ terraform {
   }
 terraform {
   backend "s3" {
-    bucket         = "mybucket2108k"
-    key            = "eks/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "Lock-Files"
+    bucket = "mybucket2108k"
+    key    = "eks/terraform.tfstate"
+    region = "us-east-1"
   }
 }
 provider "aws" {
-  region  = var.aws-region
+  region = "us-east-1"
 }
