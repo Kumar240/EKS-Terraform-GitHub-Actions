@@ -6,7 +6,7 @@ terraform {
       version = "~> 5.49.0"
     }
   }
- terraform {
+terraform {
   backend "s3" {
     bucket         = "mybucket2108k"
     key            = "eks/terraform.tfstate"
